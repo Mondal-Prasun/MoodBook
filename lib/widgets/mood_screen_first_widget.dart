@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:mood_book/screens/book_screen.dart';
 
 class MoodCard extends StatefulWidget {
   const MoodCard({
@@ -38,7 +39,11 @@ class _MoodCardState extends State<MoodCard> with TickerProviderStateMixin {
                   padding: const EdgeInsets.only(left: 10),
                   child: IconButton(
                     //to open life book button
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => BookScreen(bookName: "Book Name"),
+                      ));
+                    },
                     icon: Icon(
                       Icons.menu_book,
                       size: 40,
