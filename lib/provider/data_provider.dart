@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mood_book/model/dummy.dart';
 
 // import 'package:mood_book/model/dummy.dart';
 import 'package:mood_book/model/mood_model.dart';
@@ -51,7 +52,7 @@ class DataNotifier extends StateNotifier<List<MoodModel>> {
         ),
       );
     }
-    state = moodData;
+    state = [...moodData, ...moods];
   }
 
   void addData(MoodModel moodModel) async {

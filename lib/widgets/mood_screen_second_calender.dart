@@ -351,6 +351,22 @@ class _CustomCalender extends ConsumerState<CustomCalender>
       );
     }
 
+    Widget content = data.isNotEmpty
+        ? GridView(
+            padding: const EdgeInsets.all(15),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 6),
+            children: [
+              ...dates,
+            ],
+          )
+        : Center(
+            child: Text(
+              "Please add some story",
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          );
+
     return Expanded(
       child: FutureBuilder(
         future: _loadData,
@@ -359,15 +375,7 @@ class _CustomCalender extends ConsumerState<CustomCalender>
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
-                : GridView(
-                    padding: const EdgeInsets.all(15),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 6),
-                    children: [
-                      ...dates,
-                    ],
-                  ),
+                : content,
       ),
     );
   }

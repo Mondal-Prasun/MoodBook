@@ -28,7 +28,9 @@ class _BookScreenState extends ConsumerState<BookScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        title: Center(
+        title: Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.only(right: 50),
           child: Text(
             widget.bookName,
             style: Theme.of(context).textTheme.titleLarge!.copyWith(
@@ -37,19 +39,28 @@ class _BookScreenState extends ConsumerState<BookScreen> {
           ),
         ),
       ),
-      body: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: allData.length,
-        itemBuilder: (context, index) => Padding(
-          padding: const EdgeInsets.all(10),
-          child: Card(
-            color: Theme.of(context).colorScheme.background,
-            child: Details(
-              moodModel: allData[index],
+      body: allData.isNotEmpty
+          ? ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: allData.length,
+              itemBuilder: (context, index) => Padding(
+                padding: const EdgeInsets.all(10),
+                child: Card(
+                  color: Theme.of(context).colorScheme.background,
+                  child: Details(
+                    moodModel: allData[index],
+                  ),
+                ),
+              ),
+            )
+          : Center(
+              child: Text(
+                "Please add some story",
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      color: Colors.white,
+                    ),
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 }
