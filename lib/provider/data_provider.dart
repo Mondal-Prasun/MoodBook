@@ -2,11 +2,8 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mood_book/model/dummy.dart';
-
-// import 'package:mood_book/model/dummy.dart';
 import 'package:mood_book/model/mood_model.dart';
 import 'package:path/path.dart' as path;
-// import 'package:path_provider/path_provider.dart' as syspath;
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:sqflite/sqlite_api.dart';
 
@@ -52,7 +49,7 @@ class DataNotifier extends StateNotifier<List<MoodModel>> {
         ),
       );
     }
-    state = [...moodData, ...moods];
+    state = moodData;
   }
 
   void addData(MoodModel moodModel) async {

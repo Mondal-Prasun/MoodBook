@@ -194,7 +194,7 @@ class _CustomCalender extends ConsumerState<CustomCalender>
 
     final daysNum = switch (date.month) {
       1 => 31,
-      2 => 29,
+      2 => date.year % 4 == 0 ? 29 : 28,
       3 => 31,
       4 => 30,
       5 => 31,
@@ -208,12 +208,6 @@ class _CustomCalender extends ConsumerState<CustomCalender>
       // Add a wildcard pattern to handle other cases
       _ => 30,
     };
-
-    int currentDateDay = 0;
-
-    if (date.day - 1 > currentDateDay) {
-      currentDateDay = date.day - 1;
-    }
 
     void openDetails(File img, String description, MoodModel moodModel) {
       Widget imageBox = img.path == File("lib/assets/default_pic.jpeg").path
@@ -290,6 +284,12 @@ class _CustomCalender extends ConsumerState<CustomCalender>
       );
     }
 
+    int currentDateDay = 0;
+
+    if (date.day - 1 > currentDateDay) {
+      currentDateDay = date.day - 1;
+    }
+
     for (int i = 0; i <= daysNum - 1 - currentDateDay; i++) {
       Animation<double> usedAnimation = animation1;
 
@@ -338,7 +338,8 @@ class _CustomCalender extends ConsumerState<CustomCalender>
                 }
               },
               child: Calender(
-                date: currentDateDay + i + 1,
+                // date: currentDateDay + i + 1,
+                date: i >= data.length ? 0 : int.parse(data[i].day),
                 // moodColor: Colors.green,
                 moodColor: i >= data.length
                     ? const Color.fromARGB(0, 255, 255, 255)

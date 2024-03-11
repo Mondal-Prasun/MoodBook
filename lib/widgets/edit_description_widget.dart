@@ -39,8 +39,10 @@ class _EditDescripTionState extends ConsumerState<EditDescripTion> {
     final fromKey = GlobalKey<FormState>();
 
     void onSave() {
-      fromKey.currentState!.save();
-      Navigator.of(context).pop();
+      if (fromKey.currentState!.validate()) {
+        fromKey.currentState!.save();
+        Navigator.of(context).pop();
+      }
     }
 
     Widget _editTableTextField() {
@@ -62,6 +64,15 @@ class _EditDescripTionState extends ConsumerState<EditDescripTion> {
                   decoration: const InputDecoration(
                     border: InputBorder.none,
                   ),
+                  validator: (value) {
+                    if (value == null ||
+                        value == "" ||
+                        value.length < 5 ||
+                        value.isEmpty) {
+                      return "Please add some description(atleast 5 charecter long)";
+                    }
+                    return null;
+                  },
                   onSaved: (value) {
                     setState(() {
                       _initialText = value!;

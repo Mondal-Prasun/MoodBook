@@ -22,16 +22,22 @@ class _MoodScreenState extends ConsumerState<MoodScreen> {
   int _currentIndex = 0;
 
   @override
+  void initState() {
+    super.initState();
+    ref.read(dataProvider.notifier).getData();
+  }
+
+  @override
   Widget build(BuildContext context) {
     List<MoodModel> moodList = ref.watch(dataProvider);
 
-    // if (moodList.isNotEmpty) {
-    //   MoodModel lastDayMood = moodList[moodList.length - 1];
-    //   if (int.parse(lastDayMood.day) == todaysDate.day &&
-    //       int.parse(lastDayMood.month) == todaysDate.month) {
-    //     canEnterMood = false;
-    //   }
-    // }
+    if (moodList.isNotEmpty) {
+      MoodModel lastDayMood = moodList[moodList.length - 1];
+      if (int.parse(lastDayMood.day) == todaysDate.day &&
+          int.parse(lastDayMood.month) == todaysDate.month) {
+        canEnterMood = false;
+      }
+    }
 
     void onTapped(int index) {
       setState(() {
@@ -39,54 +45,70 @@ class _MoodScreenState extends ConsumerState<MoodScreen> {
       });
     }
 
-    Widget mainContent = _currentIndex == 0
-        ? Column(children: [
-            const MoodDate(),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shadowColor: Colors.green,
-              ),
-              onPressed: () {
-                if (canEnterMood == false) {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Lottie.asset(
-                        "lib/assets/wait.json",
-                        height: 150,
-                        width: 150,
-                      ),
-                      content: Text(
-                        "You can add again tommrow (You can add or edit description by tapping any of the dates..)",
-                        style:
-                            Theme.of(context).textTheme.titleMedium!.copyWith(
-                                  color: Colors.white,
-                                ),
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text("Ok"),
-                        ),
-                      ],
-                    ),
-                  );
-                } else {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const AddMoods(),
-                    ),
-                  );
-                }
-              },
-              child: canEnterMood == false
-                  ? const Icon(Icons.lock)
-                  : const Text("add today's story"),
+    Widget mainContent = switch (_currentIndex) {
+      0 => Column(children: [
+          const MoodDate(),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shadowColor: Colors.green,
             ),
-          ])
-        : const ChartScreen();
+            onPressed: () {
+              if (canEnterMood == false) {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Lottie.asset(
+                      "lib/assets/wait.json",
+                      height: 150,
+                      width: 150,
+                    ),
+                    content: Text(
+                      "You can add again tommrow (You can add or edit description by tapping any of the dates..)",
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                            color: Colors.white,
+                          ),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("Ok"),
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const AddMoods(),
+                  ),
+                );
+              }
+            },
+            child: canEnterMood == false
+                ? const Icon(Icons.lock)
+                : const Text("add today's story"),
+          ),
+        ]),
+      1 => const ChartScreen(),
+      2 => Center(
+          child: Column(
+            children: [
+              Lottie.asset(
+                "lib/assets/pet.json",
+              ),
+              Text(
+                "Coming Soon",
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+              )
+            ],
+          ),
+        ),
+      _ => throw Error(),
+    };
 
     return Scaffold(
       //todo for later update
@@ -110,14 +132,20 @@ class _MoodScreenState extends ConsumerState<MoodScreen> {
       ),
       backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-        toolbarHeight: _currentIndex == 0 ? 220 : null,
-        title: _currentIndex == 0
-            ? const MoodCard()
-            : const Center(
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+          toolbarHeight: _currentIndex == 0 ? 220 : null,
+          title: switch (_currentIndex) {
+            0 => MoodCard(
+                data: moodList,
+              ),
+            1 => const Center(
                 child: Text("Mood Chart"),
               ),
-      ),
+            2 => const Center(
+                child: Text("Pet"),
+              ),
+            _ => throw Error(),
+          }),
       body: mainContent,
     );
   }
