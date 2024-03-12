@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_book/screens/first_screen.dart';
 
 import 'package:mood_book/screens/mood_screen.dart';
-import 'package:mood_book/screens/second_screen.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
