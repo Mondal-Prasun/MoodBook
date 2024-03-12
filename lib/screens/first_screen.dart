@@ -65,7 +65,7 @@ class _FirstScreenState extends State<FirstScreen>
                   border: Border.all(color: Colors.white, width: 5),
                 ),
                 child: Text(
-                  "MoodBook is an app that helps users track their mood daily with a simple interface. Users can also add brief descriptions of their day to provide context. The app then generates charts and graphs to show emotional patterns over time",
+                  "MoodBook is an app that helps users track their mood daily with a simple interface. Users can also add brief descriptions of their day to provide context. The app then generates charts and graphs to show emotional patterns over time(Warning:Please do not delete app data)",
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
                         color: Colors.white,
                       ),

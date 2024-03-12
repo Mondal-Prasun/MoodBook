@@ -1,17 +1,20 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mood_book/model/mood_model.dart';
 import 'package:mood_book/screens/book_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MoodCard extends StatefulWidget {
   const MoodCard({
     super.key,
-    this.avatarImg = "lib/assets/avatar.png",
-    this.userName = "User User",
+    // this.avatarImg = "lib/assets/avatar.png",
+    // this.userName = "User User",
     required this.data,
   });
-  final String avatarImg;
-  final String userName;
+  // final String avatarImg;
+  // final String userName;
   final List<MoodModel> data;
   @override
   State<MoodCard> createState() {
@@ -22,6 +25,20 @@ class MoodCard extends StatefulWidget {
 class _MoodCardState extends State<MoodCard> with TickerProviderStateMixin {
   String moodAnimation = "lib/assets/happy.json";
   final date = DateTime.now();
+  late Future<String> userName;
+  late Future<String> userBookName;
+  late Future<String> userImg;
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  @override
+  void initState() {
+    super.initState();
+    userName = _prefs.then((pref) => pref.getString("userName") ?? "user");
+    userBookName =
+        _prefs.then((pref) => pref.getString("userBookName") ?? "userBookName");
+    userImg = _prefs
+        .then((pref) => pref.getString("userImg") ?? "lib/assets/avatar.png");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,9 +136,24 @@ class _MoodCardState extends State<MoodCard> with TickerProviderStateMixin {
                   child: IconButton(
                     //to open life book button
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => BookScreen(bookName: "Book Name"),
-                      ));
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => FutureBuilder(
+                            future: userBookName,
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const CircularProgressIndicator();
+                              } else if (snapshot.hasError ||
+                                  snapshot.data == "userBookName") {
+                                return BookScreen(bookName: snapshot.data!);
+                              } else {
+                                return BookScreen(bookName: snapshot.data!);
+                              }
+                            },
+                          ),
+                        ),
+                      );
                     },
                     icon: Icon(
                       Icons.menu_book,
@@ -131,33 +163,57 @@ class _MoodCardState extends State<MoodCard> with TickerProviderStateMixin {
                   ),
                 ),
                 const Spacer(),
-                Padding(
-                  padding: const EdgeInsets.only(left: 15.0),
-                  child: Lottie.asset(
-                    moodAnimation,
-                    height: 150,
-                    width: 120,
-                  ),
+                Lottie.asset(
+                  moodAnimation,
+                  height: 150,
+                  width: 120,
                 ),
                 const Spacer(),
-                TextButton(
-                  onPressed: () {},
-                  child: CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Colors.red,
-                    backgroundImage: AssetImage(widget.avatarImg),
+                Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: FutureBuilder(
+                    future: userImg,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError ||
+                          snapshot.data == "lib/assets/avatar.png") {
+                        return const CircleAvatar(
+                          radius: 30,
+                          backgroundColor: Colors.red,
+                          backgroundImage: AssetImage("lib/assets/avatar.png"),
+                        );
+                      } else {
+                        return CircleAvatar(
+                          radius: 30,
+                          backgroundColor: Colors.red,
+                          backgroundImage: FileImage(
+                            File(snapshot.data!),
+                          ),
+                        );
+                      }
+                    },
                   ),
                 ),
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  widget.userName,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ],
+            FutureBuilder(
+              future: userName,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError || snapshot.data == "user") {
+                  return Text(
+                    snapshot.data!,
+                    style: Theme.of(context).textTheme.titleLarge,
+                  );
+                } else {
+                  return Text(
+                    snapshot.data!,
+                    style: Theme.of(context).textTheme.titleLarge,
+                  );
+                }
+              },
             ),
           ],
         ),

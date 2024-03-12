@@ -43,19 +43,18 @@ class _MyAppState extends State<MyApp> {
             titleLarge: GoogleFonts.acme(),
           ),
         ),
-        home: SecondScreen(),
-        // home: FutureBuilder(
-        //   future: _isOkayed,
-        //   builder: (context, snapshot) {
-        //     if (snapshot.connectionState == ConnectionState.waiting) {
-        //       return const CircularProgressIndicator();
-        //     } else if (snapshot.data == false) {
-        //       return const FirstScreen();
-        //     } else {
-        //       return const MoodScreen();
-        //     }
-        //   },
-        // ),
+        home: FutureBuilder(
+          future: _isOkayed,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.data == false) {
+              return const FirstScreen();
+            } else {
+              return const MoodScreen();
+            }
+          },
+        ),
       ),
     );
   }
