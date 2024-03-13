@@ -5,8 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_book/screens/first_screen.dart';
 
-import 'package:mood_book/screens/mood_screen.dart';
-import 'package:mood_book/test.dart';
 import 'package:mood_book/widgets/splash_screen.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';

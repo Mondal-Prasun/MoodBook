@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -132,7 +133,9 @@ class _ScrollableMoodCardsState extends ConsumerState<ScrollableMoodCards> {
         });
       }
     } catch (e) {
-      print(e);
+      log(
+        e.toString(),
+      );
     }
   }
 
@@ -267,21 +270,32 @@ class _ScrollableMoodCardsState extends ConsumerState<ScrollableMoodCards> {
               ),
             ),
           ),
-          SizedBox(
-            width: 150,
-            height: 150,
-            child: SingleChildScrollView(
-              controller: _scrollController,
-              scrollDirection: Axis.horizontal,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Row(
-                  children: [
-                    ...moodCards,
-                  ],
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 150,
+                height: 150,
+                child: SingleChildScrollView(
+                  controller: _scrollController,
+                  scrollDirection: Axis.horizontal,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Row(
+                      children: [
+                        ...moodCards,
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ),
+              Text(
+                "←_← Swipe",
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      color: Colors.white,
+                    ),
+              ),
+            ],
           ),
           const SizedBox(
             height: 20,
