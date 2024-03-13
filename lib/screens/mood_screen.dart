@@ -1,7 +1,9 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mood_book/model/mood_model.dart';
+import 'package:mood_book/notification_controller.dart';
 import 'package:mood_book/provider/data_provider.dart';
 import 'package:mood_book/screens/add_mood_screen.dart';
 import 'package:mood_book/screens/chart_screen.dart';
@@ -21,10 +23,41 @@ class _MoodScreenState extends ConsumerState<MoodScreen> {
   bool canEnterMood = true;
   int _currentIndex = 0;
 
+  void showNotification() {
+    AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: 1,
+        channelKey: "Channel 1",
+        title: "From MoodBook",
+        body: "Time to tell me about your day!Come..",
+        wakeUpScreen: true,
+        // category: NotificationCategory.Reminder,
+      ),
+      schedule: NotificationInterval(
+        interval: 60 * 60 * 24,
+        allowWhileIdle: true,
+        repeats: true,
+        preciseAlarm: true,
+        timeZone: AwesomeNotifications.localTimeZoneIdentifier,
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     ref.read(dataProvider.notifier).getData();
+    AwesomeNotifications().setListeners(
+      onActionReceivedMethod:
+          NotificationController.onDismissActionReceivedMethod,
+      onNotificationCreatedMethod:
+          NotificationController.onNotificationCreatedMethod,
+      onNotificationDisplayedMethod:
+          NotificationController.onNotificationDisplayedMethod,
+      onDismissActionReceivedMethod:
+          NotificationController.onDismissActionReceivedMethod,
+    );
+    showNotification();
   }
 
   @override

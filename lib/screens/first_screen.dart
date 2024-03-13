@@ -36,6 +36,13 @@ class _FirstScreenState extends State<FirstScreen>
     });
   }
 
+  @override
+  void dispose() {
+    animController.dispose();
+
+    super.dispose();
+  }
+
   void onTap() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool("isOkeyed", true).then(
