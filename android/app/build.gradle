@@ -34,7 +34,7 @@ android {
     defaultConfig {
     multiDexEnabled true
   }
-    namespace "com.example.mood_book"
+    namespace "com.rearrange.mood_book"
     compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
@@ -59,7 +59,7 @@ android {
     defaultConfig {
         
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.mood_book"
+        applicationId "com.rearrange.mood_book"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 21
